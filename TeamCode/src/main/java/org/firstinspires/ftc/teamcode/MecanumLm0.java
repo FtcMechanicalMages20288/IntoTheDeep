@@ -40,6 +40,8 @@ public class MecanumLm0 extends LinearOpMode {
     double back_left_drivePower;
 
 
+
+
     private Servo armExtend, extenddown, claw, clawrotate;
     private CRServo servointake, servointake1, leftrotate, rightrotate;
 
@@ -56,27 +58,18 @@ public class MecanumLm0 extends LinearOpMode {
 
         if (opModeInInit()) {
             initCode();
-            armExtend.setPosition(x);
+          //  armExtend.setPosition(x);
 
         }
 
         waitForStart();
 
         while (opModeIsActive()) {
-            right_drivePower = gamepad1.right_stick_y  ;
-            back_left_drivePower = gamepad1.left_stick_y;
-            left_drivePower = gamepad1.left_stick_y;
-            back_right_drivePower = gamepad1.right_stick_y ;
 
-
-            frontLeft.setPower(left_drivePower);
-            frontRight.setPower(right_drivePower);
-            backLeft.setPower(left_drivePower);
-            backRight.setPower(right_drivePower);
-
-
-            boolean rightbumper = gamepad1.right_bumper; //Strafe Right
-            boolean leftbumper = gamepad1.left_bumper; //Strafe Left
+         movementController();
+         if(gamepad2.y){
+             armExtend.setPosition(x);
+         }
 
         /*
         1) Takes forwards and sideways input and converts them into a vector.
@@ -140,23 +133,25 @@ public class MecanumLm0 extends LinearOpMode {
                  */
 
 
-            //middle
-            if (gamepad2.dpad_left) {
-                leftrotate.setPower(1);
-                rightrotate.setPower(1);
-                armExtend.setPosition(x);
 
-            }
 
-            else if (gamepad2.dpad_right) {
-                leftrotate.setPower(-1);
-                rightrotate.setPower(-1);
+           if(hortswitch.isPressed()) { //middle
 
-            }
-            else {
-                leftrotate.setPower(0);
-                rightrotate.setPower(0);
-            }
+               if (gamepad2.dpad_left) {
+                   leftrotate.setPower(1);
+                   rightrotate.setPower(1);
+                   armExtend.setPosition(x);
+
+               } else if (gamepad2.dpad_right) {
+                   leftrotate.setPower(-1);
+                   rightrotate.setPower(-1);
+
+               } else {
+                   leftrotate.setPower(0);
+                   rightrotate.setPower(0);
+               }
+           }
+
             if (gamepad1.a) {
                 imu.resetYaw();
             }
@@ -190,25 +185,35 @@ public class MecanumLm0 extends LinearOpMode {
 
             extendcentral.setPower(0);
 
-            if (gamepad2.a) {
-                extenddown.setPosition(0.61);
+            double extendpos = 0.4;
+            if (gamepad2.a && !ExtendForward) {
+                extenddown.setPosition(extendpos);
                 servointake.setPower(1);
                 servointake1.setPower(1);
 
             }
-
-            servointake.setPower(0);
-            servointake1.setPower(0);
-            extenddown.setPosition(0.95);
-
-            if (gamepad2.b) {
-                extenddown.setPosition(0.61);
+            else if (gamepad2.b && !ExtendForward) {
+                extenddown.setPosition(extendpos);
                 servointake.setPower(-1);
                 servointake1.setPower(-1);
 
             }
-            servointake.setPower(0);
-            servointake1.setPower(0);
+            else if (gamepad2.a && ExtendForward) {
+                extenddown.setPosition(extendpos);
+                servointake.setPower(1);
+                servointake1.setPower(1);
+                extendcentral.setPower(1);
+
+            }
+            else{
+                servointake.setPower(0);
+                servointake1.setPower(0);
+                extenddown.setPosition(0.75);
+            }
+
+
+
+
 
 
             if (gamepad2.x) {
@@ -230,13 +235,7 @@ public class MecanumLm0 extends LinearOpMode {
 
 
 
-            if (gamepad2.a && ExtendForward) {
-                extenddown.setPosition(0.64);
-                servointake.setPower(1);
-                servointake1.setPower(1);
-                extendcentral.setPower(1);
 
-            }
                     /*
                     NormalizedColorSensor blocksensor= hardwareMap.get(NormalizedColorSensor.class, "blocksensor");
                     DistanceSensor distanceblocksensor = (DistanceSensor) blocksensor;
@@ -352,6 +351,7 @@ public class MecanumLm0 extends LinearOpMode {
         hortswitch = hardwareMap.get(TouchSensor.class, "hortswitch");
 
 
+
         //MOTOR DIRECTION SWITCHING
         frontRight.setDirection(DcMotor.Direction.REVERSE);
         backRight.setDirection(DcMotor.Direction.REVERSE);
@@ -367,6 +367,35 @@ public class MecanumLm0 extends LinearOpMode {
 
 
 
+    }
+    private void movementController( ){
+        right_drivePower = gamepad1.right_stick_y;
+        back_left_drivePower = gamepad1.left_stick_y;
+        left_drivePower = gamepad1.left_stick_y;
+        back_right_drivePower = gamepad1.right_stick_y;
+
+
+        frontLeft.setPower(left_drivePower);
+        frontRight.setPower(right_drivePower);
+        backLeft.setPower(left_drivePower);
+        backRight.setPower(right_drivePower);
+
+
+        boolean rightbumper = gamepad1.right_bumper; //Strafe Right
+        boolean leftbumper = gamepad1.left_bumper; //Strafe Left
+
+        if(rightbumper){
+            frontLeft.setPower(1);
+            frontRight.setPower(-1);
+            backRight.setPower(1);
+            backLeft.setPower(-1);
+        }
+        else if(leftbumper){
+            frontLeft.setPower(-1);
+            frontRight.setPower(1);
+            backRight.setPower(-1);
+            backLeft.setPower(1);
+        }
     }
 }
 
