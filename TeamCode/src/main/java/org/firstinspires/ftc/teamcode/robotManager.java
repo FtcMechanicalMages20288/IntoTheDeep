@@ -88,6 +88,7 @@ public class robotManager  {
         clawGrippingServo = robotMap.servo.get("clawGrip");
         leftArmTiltServo = robotMap.servo.get("leftArmTilt");
         rightArmTiltServo = robotMap.servo.get("rightArmTilt");
+        linkageExtensionServo = robotMap.servo.get("armExtension");
 
         //set color sensor
         intakeColorSensor = robotMap.get(ColorSensor.class, "intakeColor");
