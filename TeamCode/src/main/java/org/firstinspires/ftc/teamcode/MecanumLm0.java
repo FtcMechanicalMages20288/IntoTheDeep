@@ -58,6 +58,8 @@ public class MecanumLm0 extends LinearOpMode {
 
         if (opModeInInit()) {
             initCode();
+            claw.setPosition(0.7);
+            clawrotate.setPosition(0);
           //  armExtend.setPosition(x);
 
         }
@@ -77,7 +79,6 @@ public class MecanumLm0 extends LinearOpMode {
            the vector is rotated to account for robot rotation.
         3) Takes the magnitude from the old components
         4) Creates new forwards and sideways components for new adjusted vector
-
 
 
             double forwardsInput = -gamepad1.left_stick_y;
@@ -135,22 +136,25 @@ public class MecanumLm0 extends LinearOpMode {
 
 
 
-           if(hortswitch.isPressed()) { //middle
+
 
                if (gamepad2.dpad_left) {
                    leftrotate.setPower(1);
                    rightrotate.setPower(1);
                    armExtend.setPosition(x);
+                   clawrotate.setPosition(0);
+
 
                } else if (gamepad2.dpad_right) {
+                   clawrotate.setPosition(0.5);
                    leftrotate.setPower(-1);
                    rightrotate.setPower(-1);
 
                } else {
-                   leftrotate.setPower(0);
-                   rightrotate.setPower(0);
+                   leftrotate.setPower(-0.1);
+                   rightrotate.setPower(-0.1);
                }
-           }
+
 
             if (gamepad1.a) {
                 imu.resetYaw();
@@ -170,7 +174,7 @@ public class MecanumLm0 extends LinearOpMode {
 
             if (ExtendDown) {
                 extendcentral.setPower(-0.85);
-
+/*
                 if (hortswitch.isPressed()) {
                     extendcentral.setPower(-0.1);
                     telemetry.addData("Horizontal Slides", "Ready");
@@ -181,13 +185,15 @@ public class MecanumLm0 extends LinearOpMode {
                     extendcentral.setPower(-0.4);
                     telemetry.addData("Horizontal Slides", "Not Ready");
                 }
+
+ */
             }
 
             extendcentral.setPower(0);
 
             double extendpos = 0.4;
             if (gamepad2.a && !ExtendForward) {
-                extenddown.setPosition(extendpos);
+                extenddown.setPosition(extendpos+0.05);
                 servointake.setPower(1);
                 servointake1.setPower(1);
 
@@ -199,7 +205,7 @@ public class MecanumLm0 extends LinearOpMode {
 
             }
             else if (gamepad2.a && ExtendForward) {
-                extenddown.setPosition(extendpos);
+                extenddown.setPosition(extendpos+0.05);
                 servointake.setPower(1);
                 servointake1.setPower(1);
                 extendcentral.setPower(1);
@@ -217,20 +223,22 @@ public class MecanumLm0 extends LinearOpMode {
 
 
             if (gamepad2.x) {
+                claw.setPosition(1);
                 armExtend.setPosition(0.6);
+
+            }
+            if(gamepad2.y){
+                claw.setPosition(0.7);
+                armExtend.setPosition(0.6);
+
+
             }
 
             //close
-            if(gamepad2.dpad_down){
-                claw.setPosition(1);
 
-
-            }
 
             //open
-            if(gamepad2.dpad_up){
-                claw.setPosition(0.7);
-            }
+
 
 
 

@@ -40,9 +40,9 @@ public class LeftBlueAutoDriveEncoders extends LinearOpMode {
         waitForStart();
 
         //Trajectories
-        moveForward(25);
-        turnLeft(12);
-        moveForward(7);
+        moveForward(20);
+
+       // moveForward(7);
 
     }
 
