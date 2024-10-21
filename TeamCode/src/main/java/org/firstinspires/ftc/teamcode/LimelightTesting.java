@@ -4,18 +4,19 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import java.util.List;
-
+@TeleOp(name = "LimeTest", group = "Sensor")
 public class LimelightTesting extends OpMode {
 
     private Limelight3A limelight;
     private DcMotor lm, rm,blm,brm;
     double closestObjectX;
     boolean foundObject = false;
-
+    LLResult result;
 
 
 
@@ -35,17 +36,38 @@ public class LimelightTesting extends OpMode {
 
     @Override
     public void loop() {
-        if(foundObject != true){
+       /* if(foundObject != true){
              closestObjectX = limeLightColorX(limeLightResult());
         }
 
         if(closestObjectX < 0 ){
-            /*robot.*/ strafeLeft(0.2);
+            /*robot. strafeLeft(0.2);
 
         }
         else if(closestObjectX > 0){
             strafeRight(0.2);
         }
+
+        */
+        result = limelight.getLatestResult();
+        if (result != null) {
+
+            if (result.isValid()) {
+                telemetry.addData("tx", result.getTx());
+                telemetry.addData("txnc", result.getTxNC());
+                telemetry.addData("ty", result.getTy());
+                telemetry.addData("tync", result.getTyNC());
+            }
+            if(result.getTx() < 0){
+                telemetry.addData("Direction:", "right");
+            }
+            else if (result.getTx() > 0){
+                telemetry.addData("Direction:", "right");
+
+            }
+            telemetry.update();
+        }
+
 
 
 
