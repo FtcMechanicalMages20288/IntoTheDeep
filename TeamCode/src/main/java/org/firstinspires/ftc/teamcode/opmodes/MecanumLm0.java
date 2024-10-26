@@ -160,7 +160,10 @@ public class MecanumLm0 extends LinearOpMode {
                 extendcentral.setPower(1);
             }
 
-            extendcentral.setPower(0);
+            else {
+
+                extendcentral.setPower(0);
+            }
 
 
             if (ExtendDown) {
@@ -185,7 +188,7 @@ public class MecanumLm0 extends LinearOpMode {
             double extendpos = 0.4;
             if (gamepad2.a && !ExtendForward) {
                 extenddown.setPosition(extendpos+0.05);
-                servointake.setPower(1);
+                servointake.setPower(-1);
                 servointake1.setPower(1);
 
             }
