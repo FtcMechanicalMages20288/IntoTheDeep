@@ -181,9 +181,11 @@ public class MecanumLm0 extends LinearOpMode {
                 }
 
  */
-            }
+            } else {
 
-            extendcentral.setPower(0);
+                extendcentral.setPower(0);
+
+            }
 
             double extendpos = 0.4;
             if (gamepad2.a && !ExtendForward) {
